@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions", "selectRelationCount"]
+}
+
+enum Role {
+  user
+  admin
+}
+
+model User {
+  id          Int        @id @default(autoincrement())
+  username    String     @unique
+  password    String
+
+  role        Role       @default(user)
+
+  userInfo    UserInfo[]
+
+  trainRide   TrainRide[]
+}
+
+model UserInfo {
+  id          Int       @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  bio         String
+  DateOfBirth DateTime
+
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Class {
+  economy
+  business
+}
+
+enum RideStatus {
+  ongoing
+  cancelled
+}
+
+model TrainRide {
+  id                Int         @id @default(autoincrement())
+  departureLocation String
+  departureTime     DateTime
+  arrivalLocation   String
+  arrivalTime       DateTime
+  date              DateTime
+  price             Float
+
+  class             Class       @default(economy)
+  rideStatus        RideStatus  @default(ongoing)
+
+  userId            Int
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  notification      Notification[]
+}
+
+enum NotificationStatus {
+  unRead
+  read
+}
+
+model Notification {
+    id                  Int                @id @default(autoincrement())
+    message             String
+
+    notificationStatus  NotificationStatus @default(unRead)
+
+    trainRideId         Int
+    trainRide           TrainRide          @relation(fields: [trainRideId], references: [id], onDelete: Cascade)
+}
