@@ -18,4 +18,4 @@ authRouter.route("/logout").get(logOutUser);
 
 // authRouter.route("/validate-token").get(validateLoggedInToken);
 
-module.exports = authRouter;
+export default authRouter;

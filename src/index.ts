@@ -1,11 +1,23 @@
-require("dotenv").config();
-
-// const express = require("express");
+import { config } from "dotenv";
 import express from "express";
-const cors = require("cors");
-const morgan = require("morgan");
+import cors from "cors";
+import morgan from "morgan";
+import { JwtPayload } from "jsonwebtoken";
+import authRouter from "./resources/auth/router";
+// import loginAuth from "./middlewares/loginAuth";
+import usersRouter from "./resources/users/router";
+
+config();
 
 const app = express();
+
+declare global {
+  namespace Express {
+    interface Request {
+      currentUser: string | JwtPayload;
+    }
+  }
+}
 
 /* SETUP MIDDLEWARE */
 
@@ -17,6 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 /* SETUP ROUTES */
+
+app.use("/user", usersRouter);
 
 app.get("*", (req, res) => {
   res.json({ ok: true });

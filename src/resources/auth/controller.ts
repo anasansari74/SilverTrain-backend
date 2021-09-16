@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { findUserWithValidation } from "./services";
 
 // const { createToken } = require("../utils/authGenerator");
-import { createToken } from "../utils/authGenerator";
+import { createToken } from "../../utils/authGenerator";
 
 const loginUser = async (req: Request, res: Response) => {
   const userCreds = req.body;

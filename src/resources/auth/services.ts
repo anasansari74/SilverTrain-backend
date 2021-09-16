@@ -1,4 +1,4 @@
-import dbClient from "../utils/database";
+import dbClient from "../../utils/database";
 
 import { compare, hash } from "bcrypt";
 
