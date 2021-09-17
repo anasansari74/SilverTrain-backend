@@ -12,8 +12,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserById = void 0;
+exports.getUserById = exports.createOneUser = void 0;
+const client_1 = require(".prisma/client");
+const authGenerator_1 = require("../../utils/authGenerator");
 const database_1 = __importDefault(require("../../utils/database"));
+const services_1 = require("../auth/services");
+// CREATE A NEW USER
+const createOneUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userName, firstName, lastName, dateOfBirth, password, bio } = req.body;
+    console.log("req.body:", req.body);
+    try {
+        const newUser = {
+            userName,
+            password,
+            role: client_1.Role.USER,
+            info: {
+                create: {
+                    firstName,
+                    lastName,
+                    dateOfBirth,
+                    bio,
+                },
+            },
+        };
+        console.log("New User:", newUser);
+        const savedUser = yield (0, services_1.createdWithHash)(newUser);
+        const token = (0, authGenerator_1.createToken)({
+            id: savedUser.id,
+            userName: savedUser.userName,
+        });
+        if (savedUser && token) {
+            res.cookie("token", token, { httpOnly: true });
+            res.json({
+                user: {
+                    id: savedUser.id,
+                    userName: savedUser.userName,
+                    role: client_1.Role.USER,
+                },
+            });
+        }
+        if (!savedUser)
+            res.json({ msg: "User cound not be created" });
+        if (!token)
+            res.json({ msg: "token could not be created" });
+    }
+    catch (e) {
+        console.log(e);
+        res.json(`ERROR: ${e}`);
+    }
+});
+exports.createOneUser = createOneUser;
+// GET ONE USER
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id);
     try {
@@ -28,7 +77,7 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (e) {
         console.log(e);
-        // res.json(e.message);
+        res.json(`ERROR: ${e}`);
     }
 });
 exports.getUserById = getUserById;

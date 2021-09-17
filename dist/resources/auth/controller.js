@@ -9,16 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.logOutUser = exports.loginUser = void 0;
 const services_1 = require("./services");
 // const { createToken } = require("../utils/authGenerator");
 const authGenerator_1 = require("../../utils/authGenerator");
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userCreds = req.body;
     try {
+        console.log("testing...");
         const loggedUser = yield (0, services_1.findUserWithValidation)(userCreds);
+        console.log("Anything:", loggedUser);
         const token = (0, authGenerator_1.createToken)({
-            id: (yield loggedUser).id,
-            username: (yield loggedUser).username,
+            id: loggedUser.id,
+            username: loggedUser.username,
         });
         //creating the cookie here:
         //credential: include in the frontend
@@ -31,16 +34,13 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (error) {
-        res.status(401).json({ error: error });
+        res.status(401).json({ error: "You are unauthorized" });
     }
 });
+exports.loginUser = loginUser;
 const logOutUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.clearCookie("token");
     res.json({ msg: "You've been successfully logged out", data: null });
 });
-module.exports = {
-    loginUser,
-    logOutUser,
-    //   validateLoggedInToken,
-};
+exports.logOutUser = logOutUser;
 //# sourceMappingURL=controller.js.map

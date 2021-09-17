@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc && node ./dist/index.js || exit1",
+    "compile": "tsc && node ./dist/index.js || exit 1",
     "start": "nodemon -e ts -x \"npm run compile\""
   },
   "prisma": {
@@ -15,10 +15,12 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^3.0.2",
+    "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/morgan": "^1.9.3",
     "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",

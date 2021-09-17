@@ -2,17 +2,20 @@ import { Request, Response } from "express";
 import { findUserWithValidation } from "./services";
 
 // const { createToken } = require("../utils/authGenerator");
-import { createToken } from "../../utils/authGenerator";
+import { createToken, validateToken } from "../../utils/authGenerator";
 
-const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   const userCreds = req.body;
 
   try {
+    console.log("testing...");
+
     const loggedUser = await findUserWithValidation(userCreds);
+    console.log("Anything:", loggedUser);
 
     const token = createToken({
-      id: (await loggedUser).id,
-      username: (await loggedUser).username,
+      id: loggedUser.id,
+      username: loggedUser.username,
     });
 
     //creating the cookie here:
@@ -26,17 +29,11 @@ const loginUser = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    res.status(401).json({ error: error });
+    res.status(401).json({ error: "You are unauthorized" });
   }
 };
 
-const logOutUser = async (req: Request, res: Response) => {
+export const logOutUser = async (req: Request, res: Response) => {
   res.clearCookie("token");
   res.json({ msg: "You've been successfully logged out", data: null });
-};
-
-module.exports = {
-  loginUser,
-  logOutUser,
-  //   validateLoggedInToken,
 };

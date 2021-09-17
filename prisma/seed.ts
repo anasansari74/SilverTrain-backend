@@ -3,12 +3,12 @@ import prisma from "../src/utils/database";
 
 const users = [
   {
-    username: "Doe",
+    userName: "JohnD",
     password: "user1",
     role: Role.USER,
   },
   {
-    username: "Snow",
+    userName: "JohnS",
     password: "admin1",
     role: Role.ADMIN,
   },
@@ -19,14 +19,14 @@ const userInfo = [
     firstName: "John",
     lastName: "Doe",
     bio: "I like coding",
-    DateOfBirth: new Date(1993, 12, 16),
+    dateOfBirth: new Date(1993, 12, 16),
     userId: 1,
   },
   {
     firstName: "John",
     lastName: "Snow",
     bio: "I invented coding",
-    DateOfBirth: new Date(1990, 8, 1),
+    dateOfBirth: new Date(1990, 8, 1),
     userId: 2,
   },
 ];
