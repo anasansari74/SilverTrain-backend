@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role, Class } from "@prisma/client";
 import prisma from "../src/utils/database";
 
 const users = [
@@ -132,6 +132,14 @@ const notifications = [
   },
 ];
 
+const tickets = [
+  {
+    userId: 1,
+    class: Class.ECONOMY,
+    trainRideId: 1,
+  },
+];
+
 async function seed() {
   //The order they are "matters"
 
@@ -165,6 +173,42 @@ async function seed() {
       data: notification,
     });
     console.log({ newNotification });
+  }
+
+  //TrainTickets
+  for (const ticket of tickets) {
+    const newTicket = await prisma.ticket.create({
+      data: ticket,
+    });
+    console.log({ newTicket });
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: newTicket.userId,
+      },
+      data: {
+        tickets: {
+          connect: {
+            id: newTicket.id,
+          },
+        },
+      },
+    });
+    console.log(updatedUser);
+
+    const updatedRide = await prisma.trainRide.update({
+      where: {
+        id: newTicket.trainRideId,
+      },
+      data: {
+        tickets: {
+          connect: {
+            id: newTicket.id,
+          },
+        },
+      },
+    });
+    console.log(updatedRide);
   }
 }
 

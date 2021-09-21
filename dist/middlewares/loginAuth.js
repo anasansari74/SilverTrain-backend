@@ -19,4 +19,4 @@ const loginAuth = (req, res, next) => {
     }
 };
 exports.loginAuth = loginAuth;
-//# sourceMappingURL=login.js.map
+//# sourceMappingURL=loginAuth.js.map

@@ -6,8 +6,10 @@ import { JwtPayload } from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
 import authRouter from "./resources/auth/router";
-import { loginAuth } from "./middlewares/login";
+import { loginAuth } from "./middlewares/loginAuth";
 import usersRouter from "./resources/users/router";
+import trainRidesRouter from "./resources/trainRides/router";
+// import adminRouter from "./resources/admin/router";
 
 config();
 
@@ -33,11 +35,20 @@ app.use(cors({ origin: "http://localhost:4000", credentials: true })); // Enable
 
 /* SETUP ROUTES */
 
-app.use(authRouter);
+//AUTH
+
+// app.use(authRouter);
 
 // app.use(loginAuth);
 
+//USERS
 app.use("/user", usersRouter);
+
+//TRAIN RIDES
+app.use("/trainRides", trainRidesRouter);
+
+// //ADMIN
+// app.use("/admin", adminRouter);
 
 app.get("*", (req, res) => {
   res.json({ ok: true });

@@ -9,12 +9,6 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions", "selectRelationCount"]
-}
-
-enum Role {
-  USER
-  ADMIN
 }
 
 model User {
@@ -26,7 +20,12 @@ model User {
 
   userInfo UserInfo?
 
-  trainRide TrainRide[]
+  tickets Ticket[]
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model UserInfo {
@@ -40,18 +39,6 @@ model UserInfo {
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-enum Class {
-  ECONOMY
-  BUSINESS
-}
-
-enum RideStatus {
-  ONGOING
-  CANCELLED
-}
-
-// trainRideId ?
-
 model TrainRide {
   id                Int      @id @default(autoincrement())
   departureLocation String
@@ -61,17 +48,16 @@ model TrainRide {
   date              DateTime
   price             Float
 
-  class      Class      @default(ECONOMY)
   rideStatus RideStatus @default(ONGOING)
 
-  user User[]
+  tickets Ticket[]
 
   notification Notification?
 }
 
-enum NotificationStatus {
-  UNREAD
-  READ
+enum RideStatus {
+  ONGOING
+  CANCELLED
 }
 
 model Notification {
@@ -83,3 +69,26 @@ model Notification {
   trainRideId Int?
   trainRide   TrainRide? @relation(fields: [trainRideId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
+
+enum NotificationStatus {
+  UNREAD
+  READ
+}
+
+model Ticket {
+  id Int @id @default(autoincrement())
+  class Class @default(ECONOMY)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  trainRideId Int
+  trainRides TrainRide @relation(fields: [trainRideId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum Class {
+  ECONOMY
+  BUSINESS
+}
+
+

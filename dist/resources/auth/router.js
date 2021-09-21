@@ -8,7 +8,7 @@ const { loginUser, logOutUser,
 const { createOneUser } = require("../users/controller");
 authRouter.route("/login").post(loginUser);
 authRouter.route("/logout").get(logOutUser);
-authRouter.route("/signup").post(createOneUser);
+// authRouter.route("/signup").post(createOneUser);
 // authRouter.route("/validate-token").get(validateLoggedInToken);
 exports.default = authRouter;
 //# sourceMappingURL=router.js.map

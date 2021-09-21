@@ -12,29 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserById = exports.createOneUser = void 0;
+exports.bookRideForUser = exports.getUserById = exports.createOneUser = void 0;
 const client_1 = require(".prisma/client");
 const authGenerator_1 = require("../../utils/authGenerator");
 const database_1 = __importDefault(require("../../utils/database"));
 const services_1 = require("../auth/services");
-// CREATE A NEW USER
+// CREATE A NEW USER ❌
 const createOneUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, firstName, lastName, dateOfBirth, password, bio } = req.body;
     console.log("req.body:", req.body);
+    const newUser = {
+        userName,
+        password,
+        role: client_1.Role.USER,
+        info: {
+            firstName,
+            lastName,
+            dateOfBirth,
+            bio,
+        },
+    };
     try {
-        const newUser = {
-            userName,
-            password,
-            role: client_1.Role.USER,
-            info: {
-                create: {
-                    firstName,
-                    lastName,
-                    dateOfBirth,
-                    bio,
-                },
-            },
-        };
         console.log("New User:", newUser);
         const savedUser = yield (0, services_1.createdWithHash)(newUser);
         const token = (0, authGenerator_1.createToken)({
@@ -51,6 +49,8 @@ const createOneUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 },
             });
         }
+        if (!savedUser && !token)
+            res.json({ msg: "User and token could not be created" });
         if (!savedUser)
             res.json({ msg: "User cound not be created" });
         if (!token)
@@ -62,23 +62,45 @@ const createOneUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.createOneUser = createOneUser;
-// GET ONE USER
+// GET ONE USER ✔
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id);
     try {
         const result = yield database_1.default.user.findUnique({
             where: { id },
-            include: { userInfo: true },
+            include: { userInfo: true, trainTickets: true },
         });
         if (result)
             res.json(result);
         if (!result)
             res.json({ msg: "User not found" });
     }
-    catch (e) {
-        console.log(e);
-        res.json(`ERROR: ${e}`);
+    catch (error) {
+        console.log(error);
     }
 });
 exports.getUserById = getUserById;
+// Book Ride for user ❌
+const bookRideForUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const trainRideId = parseInt(req.params.trainRideId);
+    const userId = parseInt(req.params.id);
+    try {
+        const result = yield database_1.default.user.update({
+            where: { id: userId },
+            data: {
+                create: {
+                    trainRides: trainRideId,
+                },
+            },
+        });
+        if (result)
+            res.json(result);
+        if (!result)
+            res.json({ msg: "Booking info. invalid" });
+    }
+    catch (e) {
+        console.log(e);
+    }
+});
+exports.bookRideForUser = bookRideForUser;
 //# sourceMappingURL=controller.js.map
