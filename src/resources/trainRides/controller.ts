@@ -10,6 +10,7 @@ export const getOneRide = async (req: Request, res: Response) => {
   try {
     const result = await prisma.trainRide.findMany({
       where: { id },
+      include: { tickets: true },
     });
 
     if (result) res.json(result);

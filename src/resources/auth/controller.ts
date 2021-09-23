@@ -1,17 +1,18 @@
 import { Request, Response } from "express";
 import { findUserWithValidation } from "./services";
 
-// const { createToken } = require("../utils/authGenerator");
 import { createToken, validateToken } from "../../utils/authGenerator";
 
 export const loginUser = async (req: Request, res: Response) => {
-  const userCreds = req.body;
+  const userCreds = { ...req.body };
+
+  // if (!userCreds.userName || !userCreds.password) {
+  //   res.status(400).json({ error: "Missing username or password" });
+  // }
 
   try {
-    console.log("testing...");
-
     const loggedUser = await findUserWithValidation(userCreds);
-    console.log("Anything:", loggedUser);
+    console.log("LoggedUser:", loggedUser);
 
     const token = createToken({
       id: loggedUser.id,
@@ -29,9 +30,7 @@ export const loginUser = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error({ error });
-    res.status(401).json({ error: error });
-    res.status(401).json({ error: "You are unauthorized" });
+    res.status(500).json({ error });
   }
 };
 

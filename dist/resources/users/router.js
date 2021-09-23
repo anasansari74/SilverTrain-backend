@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const userRouter = (0, express_1.Router)();
-const { getUserById, bookRideForUser } = require("./controller");
+const { getUserById, getUserByUserName } = require("./controller");
 userRouter.get("/:id", getUserById);
-userRouter.patch("/trainRide/:trainRideId/:id", bookRideForUser);
+userRouter.get("/username/:userName", getUserByUserName);
 exports.default = userRouter;
 //# sourceMappingURL=router.js.map

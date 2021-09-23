@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bookRideForUser = exports.getUserById = exports.createOneUser = void 0;
+exports.getUserByUserName = exports.getUserById = exports.createOneUser = void 0;
 const client_1 = require(".prisma/client");
 const authGenerator_1 = require("../../utils/authGenerator");
 const database_1 = __importDefault(require("../../utils/database"));
@@ -68,7 +68,7 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const result = yield database_1.default.user.findUnique({
             where: { id },
-            include: { userInfo: true, trainTickets: true },
+            include: { userInfo: true, tickets: true },
         });
         if (result)
             res.json(result);
@@ -80,27 +80,22 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getUserById = getUserById;
-// Book Ride for user ❌
-const bookRideForUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const trainRideId = parseInt(req.params.trainRideId);
-    const userId = parseInt(req.params.id);
+// GET ONE USER by username ✔
+const getUserByUserName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userName = req.params.userName.toString();
     try {
-        const result = yield database_1.default.user.update({
-            where: { id: userId },
-            data: {
-                create: {
-                    trainRides: trainRideId,
-                },
-            },
+        const result = yield database_1.default.user.findUnique({
+            where: { userName },
+            include: { userInfo: true, tickets: true },
         });
         if (result)
             res.json(result);
         if (!result)
-            res.json({ msg: "Booking info. invalid" });
+            res.json({ msg: "User not found" });
     }
-    catch (e) {
-        console.log(e);
+    catch (error) {
+        console.log(error);
     }
 });
-exports.bookRideForUser = bookRideForUser;
+exports.getUserByUserName = getUserByUserName;
 //# sourceMappingURL=controller.js.map

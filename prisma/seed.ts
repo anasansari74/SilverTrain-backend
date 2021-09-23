@@ -1,5 +1,7 @@
-import { Role, Class } from "@prisma/client";
+import { Role, RideClass } from "@prisma/client";
 import prisma from "../src/utils/database";
+
+import { createdWithHash } from "../src/resources/auth/services";
 
 const users = [
   {
@@ -135,7 +137,7 @@ const notifications = [
 const tickets = [
   {
     userId: 1,
-    class: Class.ECONOMY,
+    rideClass: RideClass.ECONOMY,
     trainRideId: 1,
   },
 ];
@@ -145,9 +147,7 @@ async function seed() {
 
   //Users
   for (const user of users) {
-    const newUser = await prisma.user.create({
-      data: user,
-    });
+    const newUser = await createdWithHash(user);
     console.log({ newUser });
   }
 

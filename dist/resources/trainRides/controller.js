@@ -20,6 +20,7 @@ const getOneRide = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const result = yield database_1.default.trainRide.findMany({
             where: { id },
+            include: { tickets: true },
         });
         if (result)
             res.json(result);

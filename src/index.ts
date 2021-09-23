@@ -4,11 +4,13 @@ import cors from "cors";
 import morgan from "morgan";
 import { JwtPayload } from "jsonwebtoken";
 import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 
 import authRouter from "./resources/auth/router";
 import { loginAuth } from "./middlewares/loginAuth";
 import usersRouter from "./resources/users/router";
 import trainRidesRouter from "./resources/trainRides/router";
+import ticketsRouter from "./resources/trainTickets/router";
 // import adminRouter from "./resources/admin/router";
 
 config();
@@ -31,23 +33,19 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(cors({ origin: "http://localhost:4000", credentials: true })); // Enables the OPTIONS request check in our API
 
 /* SETUP ROUTES */
 
 //AUTH
 
-// app.use(authRouter);
-
+app.use(authRouter);
 // app.use(loginAuth);
 
-//USERS
 app.use("/user", usersRouter);
-
-//TRAIN RIDES
 app.use("/trainRides", trainRidesRouter);
-
-// //ADMIN
+app.use("/tickets", ticketsRouter);
 // app.use("/admin", adminRouter);
 
 app.get("*", (req, res) => {

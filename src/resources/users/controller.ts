@@ -63,7 +63,23 @@ export const getUserById = async (req: Request, res: Response) => {
   try {
     const result = await prisma.user.findUnique({
       where: { id },
-      include: { userInfo: true, trainTickets: true },
+      include: { userInfo: true, tickets: true },
+    });
+    if (result) res.json(result);
+    if (!result) res.json({ msg: "User not found" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// GET ONE USER by username ✔
+export const getUserByUserName = async (req: Request, res: Response) => {
+  const userName = req.params.userName.toString();
+
+  try {
+    const result = await prisma.user.findUnique({
+      where: { userName },
+      include: { userInfo: true, tickets: true },
     });
     if (result) res.json(result);
     if (!result) res.json({ msg: "User not found" });

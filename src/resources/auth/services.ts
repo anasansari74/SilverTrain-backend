@@ -8,7 +8,7 @@ export type UserWithInfo = {
   userName: string;
   password: string;
   role: string;
-  info: {
+  info?: {
     firstName: string;
     lastName: string;
     dateOfBirth: Date;
@@ -18,7 +18,7 @@ export type UserWithInfo = {
 
 export const findUserWithValidation = async (userCreds: User) => {
   const foundUser = await dbClient.user.findFirst({
-    where: { username: userCreds.userName },
+    where: { userName: userCreds.userName },
   });
 
   console.log("Found user:", foundUser);
@@ -26,7 +26,10 @@ export const findUserWithValidation = async (userCreds: User) => {
   if (!foundUser) throw Error("Username/Password Incorrect!");
 
   const isPasswordValid = await compare(userCreds.password, foundUser.password);
-  if (!isPasswordValid) throw Error("Username/Password Incorrect!");
+
+  // if (!isPasswordValid) throw Error("Username/Password Incorrect!");
+  if (!isPasswordValid)
+    return console.log("is password valid", isPasswordValid);
 
   return foundUser;
 };
