@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc && node ./dist/index.js || exit 1",
-    "start": "nodemon -e ts -x \"npm run compile\""
+    "compile": "tsc && node ./dist/index.js || exit1",
+    "start": "nodemon"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

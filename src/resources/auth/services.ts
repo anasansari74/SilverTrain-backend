@@ -8,7 +8,7 @@ export type UserWithInfo = {
   userName: string;
   password: string;
   role: string;
-  info?: {
+  userInfo?: {
     firstName: string;
     lastName: string;
     dateOfBirth: Date;

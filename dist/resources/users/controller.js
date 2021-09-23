@@ -20,16 +20,29 @@ const services_1 = require("../auth/services");
 // CREATE A NEW USER ❌
 const createOneUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, firstName, lastName, dateOfBirth, password, bio } = req.body;
-    console.log("req.body:", req.body);
+    // console.log("req.body:", req.body);
+    // const newUser: UserWithInfo = {
+    //   userName,
+    //   password,
+    //   role: Role.USER,
+    //   userInfo: {
+    //     firstName,
+    //     lastName,
+    //     dateOfBirth,
+    //     bio,
+    //   },
+    // };
     const newUser = {
         userName,
         password,
         role: client_1.Role.USER,
-        info: {
-            firstName,
-            lastName,
-            dateOfBirth,
-            bio,
+        userInfo: {
+            create: {
+                firstName,
+                lastName,
+                dateOfBirth: new Date(dateOfBirth),
+                bio,
+            },
         },
     };
     try {

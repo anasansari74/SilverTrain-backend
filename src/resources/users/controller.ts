@@ -11,17 +11,31 @@ export const createOneUser = async (req: Request, res: Response) => {
   const { userName, firstName, lastName, dateOfBirth, password, bio } =
     req.body;
 
-  console.log("req.body:", req.body);
+  // console.log("req.body:", req.body);
 
-  const newUser: UserWithInfo = {
+  // const newUser: UserWithInfo = {
+  //   userName,
+  //   password,
+  //   role: Role.USER,
+  //   userInfo: {
+  //     firstName,
+  //     lastName,
+  //     dateOfBirth,
+  //     bio,
+  //   },
+  // };
+
+  const newUser: any = {
     userName,
     password,
     role: Role.USER,
-    info: {
-      firstName,
-      lastName,
-      dateOfBirth,
-      bio,
+    userInfo: {
+      create: {
+        firstName,
+        lastName,
+        dateOfBirth: new Date(dateOfBirth),
+        bio,
+      },
     },
   };
 
