@@ -19,7 +19,6 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // }
     try {
         const loggedUser = yield (0, services_1.findUserWithValidation)(userCreds);
-        console.log("LoggedUser:", loggedUser);
         const token = (0, authGenerator_1.createToken)({
             id: loggedUser.id,
             username: loggedUser.username,

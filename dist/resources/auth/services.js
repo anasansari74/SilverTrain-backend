@@ -19,11 +19,9 @@ const findUserWithValidation = (userCreds) => __awaiter(void 0, void 0, void 0, 
     const foundUser = yield database_1.default.user.findFirst({
         where: { userName: userCreds.userName },
     });
-    console.log("Found user:", foundUser);
     if (!foundUser)
         throw Error("Username/Password Incorrect!");
     const isPasswordValid = yield (0, bcrypt_1.compare)(userCreds.password, foundUser.password);
-    // if (!isPasswordValid) throw Error("Username/Password Incorrect!");
     if (!isPasswordValid)
         return console.log("is password valid", isPasswordValid);
     return foundUser;

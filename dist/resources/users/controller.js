@@ -17,21 +17,9 @@ const client_1 = require(".prisma/client");
 const authGenerator_1 = require("../../utils/authGenerator");
 const database_1 = __importDefault(require("../../utils/database"));
 const services_1 = require("../auth/services");
-// CREATE A NEW USER ❌
+// CREATE A NEW USER ✔
 const createOneUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userName, firstName, lastName, dateOfBirth, password, bio } = req.body;
-    // console.log("req.body:", req.body);
-    // const newUser: UserWithInfo = {
-    //   userName,
-    //   password,
-    //   role: Role.USER,
-    //   userInfo: {
-    //     firstName,
-    //     lastName,
-    //     dateOfBirth,
-    //     bio,
-    //   },
-    // };
     const newUser = {
         userName,
         password,
@@ -46,8 +34,8 @@ const createOneUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         },
     };
     try {
-        console.log("New User:", newUser);
         const savedUser = yield (0, services_1.createdWithHash)(newUser);
+        console.log("New Hash User:", savedUser);
         const token = (0, authGenerator_1.createToken)({
             id: savedUser.id,
             userName: savedUser.userName,

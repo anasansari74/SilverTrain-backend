@@ -6,24 +6,10 @@ import prisma from "../../utils/database";
 
 import { createdWithHash, UserWithInfo } from "../auth/services";
 
-// CREATE A NEW USER ❌
+// CREATE A NEW USER ✔
 export const createOneUser = async (req: Request, res: Response) => {
   const { userName, firstName, lastName, dateOfBirth, password, bio } =
     req.body;
-
-  // console.log("req.body:", req.body);
-
-  // const newUser: UserWithInfo = {
-  //   userName,
-  //   password,
-  //   role: Role.USER,
-  //   userInfo: {
-  //     firstName,
-  //     lastName,
-  //     dateOfBirth,
-  //     bio,
-  //   },
-  // };
 
   const newUser: any = {
     userName,
@@ -40,9 +26,9 @@ export const createOneUser = async (req: Request, res: Response) => {
   };
 
   try {
-    console.log("New User:", newUser);
-
     const savedUser = await createdWithHash(newUser);
+
+    console.log("New Hash User:", savedUser);
 
     const token = createToken({
       id: savedUser.id,

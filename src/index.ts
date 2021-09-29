@@ -34,14 +34,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://localhost:4000", credentials: true })); // Enables the OPTIONS request check in our API
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true })); // Enables the OPTIONS request check in our API
 
 /* SETUP ROUTES */
 
 //AUTH
 
 app.use(authRouter);
-// app.use(loginAuth);
+app.use(loginAuth);
 
 app.use("/user", usersRouter);
 app.use("/trainRides", trainRidesRouter);

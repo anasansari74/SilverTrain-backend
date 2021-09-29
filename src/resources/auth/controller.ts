@@ -12,7 +12,6 @@ export const loginUser = async (req: Request, res: Response) => {
 
   try {
     const loggedUser = await findUserWithValidation(userCreds);
-    console.log("LoggedUser:", loggedUser);
 
     const token = createToken({
       id: loggedUser.id,

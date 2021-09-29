@@ -21,13 +21,10 @@ export const findUserWithValidation = async (userCreds: User) => {
     where: { userName: userCreds.userName },
   });
 
-  console.log("Found user:", foundUser);
-
   if (!foundUser) throw Error("Username/Password Incorrect!");
 
   const isPasswordValid = await compare(userCreds.password, foundUser.password);
 
-  // if (!isPasswordValid) throw Error("Username/Password Incorrect!");
   if (!isPasswordValid)
     return console.log("is password valid", isPasswordValid);
 
