@@ -34,7 +34,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true })); // Enables the OPTIONS request check in our API
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true,
+  })
+); // Enables the OPTIONS request check in our API
 
 /* SETUP ROUTES */
 
