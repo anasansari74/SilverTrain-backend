@@ -46,7 +46,7 @@ app.use(
 //AUTH
 
 app.use(authRouter);
-app.use(loginAuth);
+// app.use(loginAuth);
 
 app.use("/user", usersRouter);
 app.use("/trainRides", trainRidesRouter);
